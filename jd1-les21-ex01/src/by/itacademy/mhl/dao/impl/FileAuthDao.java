@@ -3,6 +3,7 @@ package by.itacademy.mhl.dao.impl;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import by.itacademy.mhl.bean.UserInfo;
@@ -18,6 +19,7 @@ public class FileAuthDao implements AuthDao {
 		boolean isUser, isExistingLogin;
 		isUser = false;
 		isExistingLogin = false;
+		String[] params = null;
 
 		try {
 			reader = new FileReader("resources/users.txt");
@@ -28,9 +30,10 @@ public class FileAuthDao implements AuthDao {
 
 			while (scan.hasNextLine()) {
 				nextLine = scan.nextLine();
-				if (nextLine.contains(login)) {
+				params = nextLine.split("\\s+");
+				if (params[0].equals(login)) {
 					isExistingLogin = true;
-					if (nextLine.contains(password)) {
+					if (params[1].equals(password)) {
 						isUser = true;
 					}
 					break;
@@ -51,7 +54,7 @@ public class FileAuthDao implements AuthDao {
 		}
 
 		if (isUser) {
-			return "USER";
+			return params[5];
 		} else if (isExistingLogin) {
 			return "INCORRECT PASSWORD";
 		} else {
